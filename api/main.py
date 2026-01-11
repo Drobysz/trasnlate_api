@@ -4,6 +4,7 @@ from typing import List, Optional
 import deepl
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
 
 app = FastAPI()
@@ -15,9 +16,9 @@ app.add_middleware(
 )
 
 
-class Req:
-    targetLang: str
-    texts: List[str]
+class Req(BaseModel):
+    targetLang: str = Field(..., description="Target language code, e.g. EN, FR, RU")
+    texts: List[str] = Field(..., description="List of input strings to translate")
 
 
 _translator: Optional[deepl.Translator] = None
